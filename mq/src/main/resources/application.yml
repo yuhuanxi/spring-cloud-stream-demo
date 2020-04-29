@@ -1,0 +1,32 @@
+spring:
+  cloud:
+    stream:
+      # 设置默认的消息中间件
+      default-binder: rocketmq
+
+      rabbit:
+        binder:
+          admin-addresses: localhost:5672
+        bindings:
+          my-input:
+            consumer:
+              consumerTagPrefix: "rabbit_"
+
+      rocketmq:
+        binder:
+          name-server: localhost:9876
+          enable-msg-trace: true
+        bindings:
+          my-input:
+            consumer:
+              tags: tag2 || tag1 || tag3 || tag4 # tag 为 tag1/tag2/tag3/tag4
+
+      bindings:
+        my-input:
+          destination: my-stream-topic # 相当于 rocketmq 的 topic
+          group: my-stream-group
+          binder: rocketmq #
+          consumer:
+            instanceCount: 1 # 指定实例数量
+        my-output:
+          destination: my-stream-topic # 相当于 rocketmq 的 topic
